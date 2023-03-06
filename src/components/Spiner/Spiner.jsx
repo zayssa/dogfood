@@ -1,11 +1,8 @@
-import React from "react";
-import "./index.css";
-
+import React from 'react';
+import s from './Spiner.module.css';
 
 const Spinner = () => {
-    return (
-        null
-    );
+  return <span className={s.loader}></span>;
 };
 
 export default Spinner;

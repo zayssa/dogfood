@@ -1,9 +1,7 @@
-import "./index.css";
+import './index.css';
 
 const Sort = () => {
-    return (
-        <div>Sort</div>
-    );
+  return <div>Каталог</div>;
 };
 
 export default Sort;

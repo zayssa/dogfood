@@ -2,6 +2,7 @@ import './index.css';
 import { ReactComponent as Save } from './save.svg';
 import { calcDiscountPrice, isLiked } from '../../utils/products';
 import cn from 'classnames';
+import { Link } from 'react-router-dom';
 
 const Card = ({
   name,
@@ -52,7 +53,7 @@ const Card = ({
           <Save className="card__favorite-icon" />
         </button>
       </div>
-      <a href="/" className="card__link">
+      <Link to={`/product/${_id}`} className="card__link">
         <img src={pictures} className="card__image" alt={description} />
         <div className="card__desc">
           <span className={discount !== 0 ? 'card__old-price' : 'card__price'}>
@@ -66,7 +67,7 @@ const Card = ({
           <span className="card__wight">{wight}</span>
           <p className="card__name">{name}</p>
         </div>
-      </a>
+      </Link>
       <a href="/" className="card__cart btn btn_type_primary">
         В корзину
       </a>

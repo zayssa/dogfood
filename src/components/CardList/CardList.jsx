@@ -6,9 +6,9 @@ import { CardContext } from '../../context/CardContext';
 import NotFound from '../../components/NotFound/NotFound';
 import { useNavigate } from 'react-router-dom';
 
-const CardList = () => {
+const CardList = ({ cards }) => {
   const { user: currentUser, isLoading } = useContext(UserContext);
-  const { cards, handleLike } = useContext(CardContext);
+  const { handleLike } = useContext(CardContext);
   const navigate = useNavigate();
   return (
     <>

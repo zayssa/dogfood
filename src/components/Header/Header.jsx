@@ -1,22 +1,44 @@
 import s from './Header.module.css';
 import cn from 'classnames';
+import { Link, useLocation } from 'react-router-dom';
+import { ReactComponent as FavouriteIcon } from './img/favorites.svg';
+import { ReactComponent as UserIcon } from './img/profile.svg';
+import { useContext } from 'react';
+import { CardContext } from '../../context/CardContext';
 
-const Header = ({ user, updateUserHandle, children }) => {
-  const handleClickButtonEdit = (e) => {
-    e.preventDefault();
-    updateUserHandle({ name: 'Марина Петрова', about: 'Студент' });
-  };
+const Header = ({ children }) => {
+  const { favourites } = useContext(CardContext);
+  const location = useLocation();
+
   return (
-    <header className={cn(s.header, 'js-click')}>
+    <header className={cn(s.header, 'cover')}>
       <div className="container">
-        {user?.email && <span>{user?.email}</span>}
-        {user?.name ? <span>{user?.name}</span> : null}
+        <div className={s.wrapper}>
+          {children}
+          <div className={s.iconsMenu}>
+            <Link className={s.favouritesLink} to="/favourites">
+              <FavouriteIcon />
+              {favourites.length !== 0 && (
+                <span className={s.iconBubble}>{favourites.length}</span>
+              )}
+            </Link>
 
-        <button onClick={handleClickButtonEdit}>Изменить</button>
-
-        <div className={s.header__wrapper}>{children}</div>
+            <div className={s.userIcon}>
+              <Link
+                to="/login"
+                state={{
+                  backgroundLocation: location,
+                  initialPath: location.pathname,
+                }}
+              >
+                <UserIcon />
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
     </header>
   );
 };
+
 export default Header;

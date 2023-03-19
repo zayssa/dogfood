@@ -4,11 +4,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Button = ({
-  type = 'primary',
+  look = 'primary',
   children,
   onClick,
   href,
   className,
+  linkState,
   ...restProps
 }) => {
   if (href) {
@@ -16,9 +17,10 @@ const Button = ({
       <Link
         to={href}
         className={cn(s.button, className, {
-          [s.primary]: type === 'primary',
-          [s.secondary]: type === 'secondary',
+          [s.primary]: look === 'primary',
+          [s.secondary]: look === 'secondary',
         })}
+        state={linkState}
         {...restProps}
       >
         {children}
@@ -29,8 +31,8 @@ const Button = ({
   return (
     <button
       className={cn(s.button, className, {
-        [s.primary]: type === 'primary',
-        [s.secondary]: type === 'secondary',
+        [s.primary]: look === 'primary',
+        [s.secondary]: look === 'secondary',
       })}
       onClick={onClick}
       {...restProps}
@@ -39,4 +41,5 @@ const Button = ({
     </button>
   );
 };
+
 export default Button;

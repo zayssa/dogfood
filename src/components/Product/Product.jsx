@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import s from './Product.module.css';
 import { calcDiscountPrice, createMarkup, isLiked } from '../../utils/products';
 import cn from 'classnames';
 import { ReactComponent as Save } from './image/save.svg';
 import truck from './image/truck.svg';
 import quality from './image/quality.svg';
-import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../../context/UserContext';
+import ContentHeader from '../ContentHeader/ContentHeader';
 
 const Product = ({
-  currentUser,
   _id,
   onProductLike,
   available,
@@ -19,23 +19,18 @@ const Product = ({
   pictures,
   likes,
 }) => {
-  const navigate = useNavigate();
+  const { user: currentUser } = useContext(UserContext);
   const discountPrice = calcDiscountPrice(price, discount);
   const liked = isLiked(likes, currentUser?._id);
   const descriptionHtml = createMarkup(description);
+
   return (
     <>
-      <div>
-        <a className="button-back" href="/" onClick={() => navigate(-1)}>
-          Назад
-        </a>
-        <h1 className={s.productTitle}>{name}</h1>
-        <div>
-          <span>
-            Артикул: <b>2388907</b>
-          </span>
-        </div>
-      </div>
+      <ContentHeader title={name}>
+        <span>
+          Артикул: <b>2388907</b>
+        </span>
+      </ContentHeader>
 
       <div className={s.product}>
         <div className={s.imgWrapper}>

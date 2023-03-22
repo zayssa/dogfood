@@ -1,11 +1,12 @@
 import './index.css';
 import { ReactComponent as Save } from './save.svg';
-import { calcDiscountPrice, isLiked } from '../../utils/products';
 import cn from 'classnames';
+import { calcDiscountPrice, isLiked } from '../../utils/products';
 import { Link } from 'react-router-dom';
-import { CardContext } from '../../context/CardContext';
-import { useContext } from 'react';
 import CardSkeleton from '../../components/CardSkeleton/CardSkeleton';
+import { useDispatch, useSelector } from 'react-redux';
+import { useCallback } from 'react';
+import { changeLikeProductThunk } from '../../redux/redux-thunk/products-thunk/changeLikeProductThunk';
 
 const Card = ({
   name,
@@ -15,17 +16,17 @@ const Card = ({
   description,
   pictures,
   tags,
-  currentUser,
   likes,
   _id,
 }) => {
+  const { userInfo, isLoading } = useSelector((state) => state.user);
   const discountPrice = calcDiscountPrice(price, discount);
-  const liked = isLiked(likes, currentUser?._id);
-  const { handleLike, isLoading } = useContext(CardContext);
+  const liked = isLiked(likes, userInfo?._id);
+  const dispatch = useDispatch();
 
-  const handleLikeClick = () => {
-    handleLike({ _id, likes });
-  };
+  const handleLikeClick = useCallback(() => {
+    return dispatch(changeLikeProductThunk({ _id, likes }));
+  }, [_id, dispatch, likes]);
 
   return (
     <>
@@ -42,6 +43,7 @@ const Card = ({
                 <span
                   key={tag}
                   className={cn('tag', {
+                    // [`tag_type_${tag}`]: true
                     tag_type_new: tag === 'new',
                     tag_type_sale: tag === 'sale',
                   })}

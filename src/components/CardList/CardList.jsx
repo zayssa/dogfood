@@ -1,15 +1,14 @@
 import './index.css';
 import Card from '../Card/Card';
-import { useContext } from 'react';
-import { UserContext } from '../../context/UserContext';
-import { CardContext } from '../../context/CardContext';
 import NotFound from '../../components/NotFound/NotFound';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const CardList = ({ cards }) => {
-  const { user: currentUser, isLoading } = useContext(UserContext);
-  const { handleLike } = useContext(CardContext);
+  const { isLoading } = useSelector((state) => state.products);
+
   const navigate = useNavigate();
+
   return (
     <>
       {!cards.length && !isLoading ? (
@@ -22,14 +21,7 @@ const CardList = ({ cards }) => {
 
       <div className="cards">
         {cards.map((el) => {
-          return (
-            <Card
-              key={el._id}
-              {...el}
-              onProductLike={handleLike}
-              currentUser={currentUser}
-            />
-          );
+          return <Card key={el._id} {...el} />;
         })}
       </div>
     </>

@@ -1,32 +1,33 @@
-import React, { useCallback, useContext } from 'react';
-import api from '../../utils/api';
+import React, { useCallback, useEffect } from 'react';
+
 import Spinner from '../../components/Spiner/Spiner';
 import Product from '../../components/Product/Product';
 import s from '../../components/Product/Product.module.css';
 import { useParams } from 'react-router-dom';
 import NotFoundPage from '../../pages/NotFoundPage/NotFoundPage';
-import useApi from '../../hooks/useApi';
-import { CardContext } from '../../context/CardContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { getSingleProductThunk } from '../../redux/redux-thunk/singleProduct-thunk/getSingleProductThunk';
+import { changeLikeProductThunk } from '../../redux/redux-thunk/products-thunk/changeLikeProductThunk';
+import { setProductState } from '../../redux/redux-slice/singleProduct/singleProductSlice';
 
 const ProductPage = () => {
   const { productId } = useParams();
-  const { handleLike } = useContext(CardContext);
-  const handleGetProduct = useCallback(
-    () => api.getProductById(productId),
-    [productId]
-  );
+  const dispatch = useDispatch();
   const {
-    data: product,
-    setData: setProduct,
+    singleProduct,
     isLoading,
     error: isError,
-  } = useApi(handleGetProduct);
+  } = useSelector((state) => state.singleProduct);
+
+  useEffect(() => {
+    dispatch(getSingleProductThunk(productId));
+  }, [dispatch, productId]);
 
   const handleProductLike = useCallback(() => {
-    handleLike(product).then((updateProduct) => {
-      setProduct(updateProduct);
+    dispatch(changeLikeProductThunk(singleProduct)).then((updateProduct) => {
+      dispatch(setProductState(updateProduct.payload.product));
     });
-  }, [product, setProduct, handleLike]);
+  }, [dispatch, singleProduct]);
 
   return (
     <>
@@ -35,7 +36,9 @@ const ProductPage = () => {
           <Spinner />
         </div>
       ) : (
-        !isError && <Product {...product} onProductLike={handleProductLike} />
+        !isError && (
+          <Product {...singleProduct} onProductLike={handleProductLike} />
+        )
       )}
       {isError ? <NotFoundPage /> : null}
     </>

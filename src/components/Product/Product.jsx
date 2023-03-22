@@ -1,12 +1,12 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import s from './Product.module.css';
 import { calcDiscountPrice, createMarkup, isLiked } from '../../utils/products';
 import cn from 'classnames';
 import { ReactComponent as Save } from './image/save.svg';
 import truck from './image/truck.svg';
 import quality from './image/quality.svg';
-import { UserContext } from '../../context/UserContext';
 import ContentHeader from '../ContentHeader/ContentHeader';
+import { useSelector } from 'react-redux';
 
 const Product = ({
   _id,
@@ -19,11 +19,11 @@ const Product = ({
   pictures,
   likes,
 }) => {
-  const { user: currentUser } = useContext(UserContext);
-  const discountPrice = calcDiscountPrice(price, discount);
-  const liked = isLiked(likes, currentUser?._id);
-  const descriptionHtml = createMarkup(description);
+  const { userInfo } = useSelector((state) => state.user);
 
+  const discountPrice = calcDiscountPrice(price, discount);
+  const liked = isLiked(likes, userInfo?._id);
+  const descriptionHtml = createMarkup(description);
   return (
     <>
       <ContentHeader title={name}>
